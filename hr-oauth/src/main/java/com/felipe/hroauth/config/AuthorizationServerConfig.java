@@ -1,6 +1,7 @@
 package com.felipe.hroauth.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -15,8 +16,10 @@ import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
 @Configuration
 @EnableAuthorizationServer
 public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdapter {
-    private static final String HR_OAUTH = "myappname123";
-    private static final String HR_OAUTH_SECRET = "myappsecret123";
+    @Value("${oauth.client.name}")
+    private String oauthClientName;
+    @Value("${oauth.client.secret}")
+    private String oauthClientSecret;
     private static final String GRANT_TYPE = "password";
     private static final String SCOPE_READ = "read";
     private static final String SCOPE_WRITE = "write";
@@ -41,8 +44,8 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     @Override
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
         clients.inMemory()
-                .withClient(HR_OAUTH)
-                .secret(passwordEncoder.encode(HR_OAUTH_SECRET))
+                .withClient(oauthClientName)
+                .secret(passwordEncoder.encode(oauthClientSecret))
                 .scopes(SCOPE_READ, SCOPE_WRITE)
                 .authorizedGrantTypes(GRANT_TYPE)
                 .accessTokenValiditySeconds(ACCESS_TOKEN_VALIDITY_SECONDS);
