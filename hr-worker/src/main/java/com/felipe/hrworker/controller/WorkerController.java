@@ -22,8 +22,6 @@ import java.util.Optional;
 @RefreshScope
 public class WorkerController {
     private static final Logger logger = LoggerFactory.getLogger(WorkerController.class);
-    @Value("${test.config}")
-    private String testConfig;
 
     private final Environment env;
     private final WorkerRepository workerRepository;
@@ -35,7 +33,6 @@ public class WorkerController {
 
     @GetMapping(value = "/configs")
     public ResponseEntity<Void> getConfig() {
-        logger.info("CONFIG = " + testConfig);
         return ResponseEntity.noContent().build();
     }
     @GetMapping
